@@ -1,14 +1,18 @@
 {
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
     "meta": {
-        "version": "PTDL_v1"
+        "version": "PTDL_v1",
+        "update_url": null
     },
-    "exported_at": "2021-02-26T12:57:37+01:00",
+    "exported_at": "2021-03-31T18:28:15-07:00",
     "name": "Beam-MP",
-    "author": "mets.radboud@gmail.com",
+    "author": "admin@joepena.dev",
     "description": "Beam-MP Server",
     "features": null,
-    "image": "beammp:latest",
+    "images": [
+        "quay.io\/joeyjoey1234\/beam:latest"
+    ],
+    "file_denylist": [],
     "startup": ".\/BeamMP-Server",
     "config": {
         "files": "{\r\n    \"Server.cfg\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"Debug =\": \"Debug = {{env.DEBUG}}\",\r\n            \"Private =\": \"Private = {{env.PRIVATE}}\",\r\n            \"Port =\": \"Port = {{server.build.default.port}}\",\r\n            \"Cars =\": \"Cars = {{env.CARS}}\",\r\n            \"MaxPlayers =\": \"MaxPlayers = {{env.MAXPLAYERS}}\",\r\n            \"Map =\": \"Map = \\\"{{env.MAP}}\\\"\",\r\n            \"Name =\": \"Name = \\\"^a^l\\u2b50 {{env.NAME}} \\u2b50 ^f^l- ^b^l^nFree Beam-MP Server^r^b^l provided by ^e^nVanishedServers!\\\"\",\r\n            \"Desc =\": \"Desc = \\\"{{env.DESC}}\\\"\",\r\n            \"Use =\": \"Use = \\\"{{env.RESOURCE}}\\\"\",\r\n            \"AuthKey =\": \"AuthKey = \\\"{{env.AUTH}}\\\"\"\r\n        }\r\n    }\r\n}",
@@ -18,7 +22,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/bash\r\n\r\n#install wget and unzip\r\napt -y update\r\napt -y install wget unzip\r\n\r\n#move to server directory\r\nmkdir \/mnt\/server\r\ncd \/mnt\/server\r\n\r\n#default config\r\necho \"# This is the BeamMP Server Configuration File v0.60\r\nDebug = false\r\nPrivate =\r\nPort =\r\nCars =\r\nMaxPlayers =\r\nMap =\r\nName =\r\nDesc =\r\nuse = \\\"Resources\\\"\r\nAuthKey =\" >> Server.cfg\r\n\r\nwget https:\/\/github.com\/BeamMP\/BeamMP-Server\/releases\/download\/v1.20-linux\/BeamMP-Server-debian\r\nmv BeamMP-Server-debian BeamMP-Server\r\nchmod +x BeamMP-Server",
+            "script": "#!\/bin\/bash\r\n\r\n#install wget and unzip\r\napt -y update\r\napt -y install wget unzip\r\n\r\n#move to server directory\r\nmkdir \/mnt\/server\r\ncd \/mnt\/server\r\n\r\n#default config\r\necho \"# This is the BeamMP Server Configuration File v0.60\r\nDebug = false\r\nPrivate =\r\nPort =\r\nCars =\r\nMaxPlayers =\r\nMap =\r\nName =\r\nDesc =\r\nuse = \\\"Resources\\\"\r\nAuthKey =\" >> Server.cfg\r\n\r\nwget https:\/\/github.com\/BeamMP\/BeamMP-Server\/releases\/download\/${BeamVersion}-linux\/BeamMP-Server-linux\r\nmv BeamMP-* BeamMP-Server\r\nchmod +x BeamMP-Server",
             "container": "ubuntu:18.04",
             "entrypoint": "bash"
         }
@@ -104,6 +108,15 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:50"
+        },
+        {
+            "name": "BeamVersion",
+            "description": "Pick a Beam Version from the github\r\nhttps:\/\/github.com\/BeamMP\/BeamMP-Server\/releases\/",
+            "env_variable": "BeamVersion",
+            "default_value": "v2.0.2",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20"
         }
     ]
 }
