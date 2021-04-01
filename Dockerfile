@@ -10,7 +10,6 @@ RUN apt-get update --fix-missing
 
 RUN apt -y update && apt -y install liblua5.3-0 libz-dev rapidjson-dev libcurl4-openssl-dev curl git make cmake g++ libboost1.71-dev libssl-dev libboost1.71-all-dev build-essential liblua5.3-dev
 RUN apt-get -y update
-RUN apt -y install lua5.3-dev
 
 USER container
 ENV USER=container HOME=/home/container
