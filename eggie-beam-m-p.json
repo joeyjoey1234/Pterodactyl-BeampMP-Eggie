@@ -4,26 +4,26 @@
         "version": "PTDL_v1",
         "update_url": null
     },
-    "exported_at": "2021-03-31T18:29:09-07:00",
+    "exported_at": "2021-03-31T21:29:57-07:00",
     "name": "Beam-MP",
     "author": "admin@joepena.dev",
-    "description": "Beam-MP Server",
+    "description": "Beam-MP Server\r\n\r\nDEFAULT PORT IS 30814\r\n\r\nNEED TO ENTER THE AUTH KEY before install, or edit the config or edit the var after install",
     "features": null,
     "images": [
         "quay.io\/joeyjoey1234\/beam:latest"
     ],
     "file_denylist": [],
-    "startup": ".\/BeamMP-Server",
+    "startup": ".\/BeamMP-Server-linux",
     "config": {
-        "files": "{\r\n    \"Server.cfg\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"Debug =\": \"Debug = {{env.DEBUG}}\",\r\n            \"Private =\": \"Private = {{env.PRIVATE}}\",\r\n            \"Port =\": \"Port = {{server.build.default.port}}\",\r\n            \"Cars =\": \"Cars = {{env.CARS}}\",\r\n            \"MaxPlayers =\": \"MaxPlayers = {{env.MAXPLAYERS}}\",\r\n            \"Map =\": \"Map = \\\"{{env.MAP}}\\\"\",\r\n            \"Name =\": \"Name = \\\"^a^l\\u2b50 {{env.NAME}} \\u2b50 ^f^l- ^b^l^nFree Beam-MP Server^r^b^l provided by ^e^nVanishedServers!\\\"\",\r\n            \"Desc =\": \"Desc = \\\"{{env.DESC}}\\\"\",\r\n            \"Use =\": \"Use = \\\"{{env.RESOURCE}}\\\"\",\r\n            \"AuthKey =\": \"AuthKey = \\\"{{env.AUTH}}\\\"\"\r\n        }\r\n    }\r\n}",
+        "files": "{}",
         "startup": "{\r\n    \"done\": \"Vehicle event network online\"\r\n}",
         "logs": "{}",
         "stop": "exit"
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/bash\r\n\r\n#install wget and unzip\r\napt -y update\r\napt -y install wget unzip\r\n\r\n#move to server directory\r\nmkdir \/mnt\/server\r\ncd \/mnt\/server\r\n\r\n#default config\r\necho \"# This is the BeamMP Server Configuration File v0.60\r\nDebug = false\r\nPrivate =\r\nPort =\r\nCars =\r\nMaxPlayers =\r\nMap =\r\nName =\r\nDesc =\r\nuse = \\\"Resources\\\"\r\nAuthKey =\" >> Server.cfg\r\n\r\nwget https:\/\/github.com\/BeamMP\/BeamMP-Server\/releases\/download\/${BeamVersion}-linux\/BeamMP-Server-linux\r\nmv BeamMP-* BeamMP-Server\r\nchmod +x BeamMP-Server",
-            "container": "ubuntu:18.04",
+            "script": "#!\/bin\/bash\r\n\r\n#install wget and unzip\r\nexport DEBIAN_FRONTEND=noninteractive\r\napt -y update\r\napt -y install wget unzip\r\n\r\napt -y update && apt -y install liblua5.3-0 libz-dev rapidjson-dev libcurl4-openssl-dev curl git make cmake g++ libboost1.71-dev libssl-dev libboost1.71-all-dev lua5.3-dev\r\n##ive included the above packages in the install in case one day we have to compile BEAM-MP and the devs stop including a precompiled file file with it\r\n\r\n#move to server directory\r\nmkdir \/mnt\/server\r\ncd \/mnt\/server\r\n\r\n#default config\r\necho \"# This is the BeamMP Server Configuration File v0.60\r\nDebug = ${DEBUG} # true or false to enable debug console output\r\nPrivate = ${PRIVATE} # Private?\r\nPort = ${SERVER_PORT} # Port to run the server on UDP and TCP Do not change unless you submited a ticket to change your ip or port\r\nCars = ${CARS}  # Max cars for every player\r\nMaxPlayers = ${MAXPLAYERS}  # Maximum Amount of Clients\r\nMap = \\\"${MAP}\\\"  # Default Map\r\nName = \\\"${SERVERNAME}\\\"    # Server Name\r\nDesc = \\\"${DESC}\\\"   # Server Description\r\nuse = \\\"Resources\\\"   # Resource file name\r\nAuthKey = \\\"${AUTH}\\\"  # Auth Key  \" > Server.cfg\r\n\r\n\r\nwget -O BeamMP-Server-linux https:\/\/github.com\/BeamMP\/BeamMP-Server\/releases\/download\/${BEAMVERSION}\/BeamMP-Server-linux\r\n###i predict this wget to stop working, the releases paged seemed to not be to well organized, ex. the BeamMP-Server-linux part of the url has changed 3 times per release.\r\n\r\n\r\nchmod +x BeamMP-Server-linux\r\n\r\n\r\necho \"Hello! :)\r\nWhen editing any startup variables a server reinstall needs to occur inorder for those new variables to take effect\r\nYour mods etc will stay on the server even after a reinstall (To reinstall go to Settings -> REINSTALL SERVER)\r\nIf you do not wish to reinstall you can simply edit the Server.cfg file with variables of your choosing and start and stop the server from the console panel.\r\n\r\nGuides for Beam_MP are found here https:\/\/wiki.beammp.com\/en\/home this includes mods etc, dont be afraid to submit a ticket if you need some help or you have an issue with your server\r\n\r\nThank you :)\" > Readme.txt",
+            "container": "ubuntu:20.04",
             "entrypoint": "bash"
         }
     },
@@ -101,19 +101,19 @@
             "rules": "required|string|in:true,false"
         },
         {
-            "name": "Resource",
-            "description": "Resource folder location",
-            "env_variable": "RESOURCE",
-            "default_value": "\"Resources\"",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "required|string|max:50"
-        },
-        {
             "name": "BeamVersion",
             "description": "Pick a Beam Version from the github\r\nhttps:\/\/github.com\/BeamMP\/BeamMP-Server\/releases\/",
-            "env_variable": "BeamVersion",
+            "env_variable": "BEAMVERSION",
             "default_value": "v2.0.2",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20"
+        },
+        {
+            "name": "Server Name",
+            "description": "",
+            "env_variable": "SERVERNAME",
+            "default_value": "CoolName",
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:20"
