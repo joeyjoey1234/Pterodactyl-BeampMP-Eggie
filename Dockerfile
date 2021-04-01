@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 RUN apt -y update && apt -y install liblua5.3-0 libz-dev rapidjson-dev libcurl4-openssl-dev curl git make cmake g++ libboost1.71-dev libssl-dev
 
